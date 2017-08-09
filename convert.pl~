@@ -1,0 +1,9 @@
+use warnings;
+use strict;
+
+local $/ = "\n--\n";
+while (<>) {
+    chomp;
+    print;
+    print "\nEND\n";
+}

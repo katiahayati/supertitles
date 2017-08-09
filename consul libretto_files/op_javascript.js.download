@@ -1,0 +1,412 @@
+//Jquery
+
+
+$(document).ready(function() {	 
+	$('.menu_header').hover(function(){
+		var this_class = $(this).attr('class');
+		var to_item = this_class.replace('menu_header ','')
+		var to_class = '.menu_container.'+to_item;
+		var this_container = $(this).find('.menu_container');
+		
+		if(this_container.length != 0){
+			 this_container.hide();
+			 $('body').append($(to_class));
+		}
+		else{
+			$('.menu_container').hide();
+			$(to_class).show();
+			$(this).append($(to_class));
+		}
+	});
+	
+	//$('.titel_bar').append($('.menu_div'));
+	
+});
+
+
+//Plain javascript
+function f_scrollTop() {
+	return f_filterResults (
+		window.pageYOffset ? window.pageYOffset : 0,
+		document.documentElement ? document.documentElement.scrollTop : 0,
+		document.body ? document.body.scrollTop : 0
+	);
+}
+function f_filterResults(n_win, n_docel, n_body) {
+	var n_result = n_win ? n_win : 0;
+	if (n_docel && (!n_result || (n_result > n_docel)))
+		n_result = n_docel;
+	return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
+}
+
+function change_ad_on_scroll(){
+	var scroll_top = f_scrollTop()
+	var adsense_right_160_600 = document.getElementById("adsense_right_160_600");
+	if(scroll_top < 170){
+	adsense_right_160_600.style.position = "absolute"
+	adsense_right_160_600.style.top = "170px"
+	}
+	else{
+	adsense_right_160_600.style.position = "fixed"
+	adsense_right_160_600.style.top = "5px"
+	}
+}
+
+
+
+
+
+function externalLinks() {
+ if (!document.getElementsByTagName) return;
+ var anchors = document.getElementsByTagName("a");
+ for (var i=0; i<anchors.length; i++) {
+   var anchor = anchors[i];
+   if (anchor.getAttribute("href") &&
+       anchor.getAttribute("rel") == "external")
+     anchor.target = "_blank";
+ }
+}
+function onload_function(){
+externalLinks()
+var title_post_page = document.getElementsByName("title_post_page");
+if(!title_post_page){
+document.forms.searchform.title_post.focus()
+}
+}
+function click_submit(thiselement){
+thiselement.style.marginLeft = "1px";
+thiselement.style.marginTop = "1px";
+thiselement.style.marginBottom = "0px";
+}
+function change_input(nr,string){
+	var input_1 = document.getElementById("input_1");
+	var input_2 = document.getElementById("input_2");
+	var input_3 = document.getElementById("input_3");
+	var input_4 = document.getElementById("input_4");
+	if(nr == 1){input_1.value = string}
+	if(nr == 2){
+		if(input_2.value == ''){input_2.value = string}
+		else if(input_3.value == ''){input_3.value = string}
+		else if(input_4.value == ''){input_4.value = string}
+		}
+}
+function change_example(type,new_value){
+
+scroll(0,0)
+select_tab(type)
+deselect_all_types()
+
+var search_input = document.getElementById("search_input");
+search_input.value = new_value
+//var h1_header_examples = document.getElementById("h1_header_examples");
+//h1_header_examples.innerHTML = 'Examples to search '+type;
+var input_search_type = document.getElementById("input_search_type");
+input_search_type.value = type
+document.forms.searchform.title_post.focus()
+}
+function preset_buttons(type,setting,voices,query){
+	select_tab(type)
+	
+	var input_search_type = document.getElementById("input_search_type");
+	input_search_type.value = type
+	
+	
+	clear_search_field()
+	
+	deselect_all_types()
+	if(setting){add_keyword(setting,type)}
+	
+	if(voices){
+	array = voices.split(",")
+	for(var i=0; i<array.length; i++) {add_keyword(array[i],type)}
+	}
+	if(query){add_to_search_field(query)}
+}
+function select_tab(type){
+	hide_all_adv_search()
+
+	if(type == 'scenes'){
+		display_inherent("adv_search_type_scenes")
+		display_inherent("adv_search_voices_scenes")
+		display_inherent("adv_search_lang_scenes")
+	}
+	if(type == 'roles'){
+		display_inherent("adv_search_voices_roles")
+		display_inherent("adv_search_lang_roles")
+	}
+	if(type == 'operas'){
+		display_inherent("adv_search_lang_operas")
+	}
+	
+
+
+	change_class("tab_search_all","tab_back")
+	change_class("tab_search_scenes","tab_back")
+	change_class("tab_search_roles","tab_back")
+	change_class("tab_search_operas","tab_back")
+	change_class("tab_search_composers","tab_back")
+
+	change_class("tab_search_"+type,"tab_front")
+	
+}
+function change_class(element_id,new_class){
+	document.getElementById(element_id).setAttribute("class", new_class);
+}
+function hide_all_adv_search(){
+	
+	display_hidden("adv_search_type_scenes");
+	display_hidden("adv_search_voices_roles");
+	display_hidden("adv_search_voices_scenes");
+	display_hidden("adv_search_lang_scenes");
+	display_hidden("adv_search_lang_roles");
+	display_hidden("adv_search_lang_operas");
+	
+}
+function clear_search_field(){
+	var search_input = document.getElementById("search_input");
+	search_input.value = ''
+	
+}
+function add_to_search_field(query){
+	var search_input = document.getElementById("search_input");
+	search_input.value += ' '+query
+	
+}
+function display_inherent(element_id){
+	var element = document.getElementById(element_id);
+		element.style.display = 'inherit';
+}
+function display_hidden(element_id){
+	var element = document.getElementById(element_id);
+		element.style.display = 'none';
+}
+function add_keyword(keyword,type,kind,this_element){
+//	var search_input = document.getElementById("preset_input");
+	var search_input = document.getElementById("search_input");
+	
+	var search_value = search_input.value;
+	var keyword_z = keyword.replace('+', " ")
+	var button_id = document.getElementById("button_"+keyword+"_"+type);
+	
+	var check = search_value.search(keyword_z);
+	
+	if(check == -1){
+	if(type == 'scenes' & kind == 'voices'){}else{deselect_all(kind,type)}
+	var search_input = document.getElementById("search_input");
+	var search_value = search_input.value;
+	search_input.value = search_value+' '+keyword_z;
+	button_id.setAttribute("class", "voice_button vb_a");
+	
+	}
+	else if(check == 0)
+	{
+	if(type == 'scenes' & kind == 'voices'){}else{deselect_all(kind,type)}
+	var search_input = document.getElementById("search_input");
+	var search_value = search_input.value;
+	search_input.value = search_value.replace(' '+keyword_z, "")
+	button_id.setAttribute("class", "voice_button vb_na");
+	
+	}
+	else
+	{
+	if(type == 'scenes' & kind == 'voices'){}else{deselect_all(kind,type)}
+	
+	var search_input = document.getElementById("search_input");
+	var search_value = search_input.value;
+	search_input.value = search_value.replace(' '+keyword_z, "")
+	button_id.setAttribute("class", "voice_button vb_na");
+
+	}
+	document.forms.searchform.title_post.focus()
+}
+function deselect_all_types(){
+	deselect_all('voices','roles')
+	deselect_all('voices','scenes')
+	deselect_all('lang','roles')	
+	deselect_all('lang','operas')	
+	deselect_all('lang','scenes')	
+	deselect_all('type','scenes')	
+}
+function deselect_all(kind,type){
+	if(kind == 'voices'){
+  	if(type == 'roles'){
+  	var array_t_v = new Array("soprano","mezzo","contralto","tenor","baritone","bass","countertenor","treble");
+  	}else{
+  	var array_t_v = new Array("soprano","mezzo","contralto","tenor","baritone","bass","countertenor","treble","choir");
+  	}
+	
+	deselect_some(array_t_v,type)
+	
+	}
+	else if(kind == 'type'){
+	var array_t_s = new Array("aria","duet","trio","quartet","quintet","sextet","septet","ensemble","recitative","instrumental");
+	deselect_some(array_t_s,type)
+	}
+	else if(kind == 'lang'){
+	var array_t_l = new Array("italian","german","french","english","russian");
+	deselect_some(array_t_l,type)
+	}
+	else if(kind == 'country'){
+	var array_t_l = new Array("italy","germany","france","england","austria","usa");
+	deselect_some(array_t_l,type)
+	}
+	else if(kind == 'years'){
+	var array_t_l = new Array("1600+1700","1700+1750","1750+1800","1800+1850","1850+1900","1900+1950","1950+2000");
+	deselect_some(array_t_l,type,kind)
+	}
+}
+function deselect_some(array,type,kind){
+	for(var i=0; i<array.length; i++) 
+	{
+	var search_input = document.getElementById("search_input");
+	var search_value = search_input.value;
+
+	var value = array[i];
+		
+	var button_id = document.getElementById("button_"+value+"_"+type);
+		
+	//	if(kind == 'years'){
+			value2 = value.replace("+", " ")
+			search_input.value = search_value.replace(" "+value2, "")
+		//	alert(value2)
+	//	}	
+		search_value = search_input.value;
+	//	else{
+			search_input.value = search_value.replace(" "+value, "")
+	//	}
+		
+		button_id.setAttribute("class", "voice_button vb_na");
+	}
+}
+
+
+function focus_to_end(){
+	var search_input = document.getElementById("search_input");
+	var search_value = search_input.value+' end';	
+	search_input.value = search_value	
+	document.forms.searchform.title_post.focus()
+}
+
+/*!
+* youtube.ga.js | v0.1
+* Copyright (c) 2012 Sander Heilbron (http://sanderheilbron.nl)
+* MIT licensed
+*/
+
+
+function onYouTubePlayerAPIReady() {
+    player = new YT.Player('ytplayer', {
+        height: configYouTubePlayer.height,
+        width: configYouTubePlayer.width,
+        videoId: configYouTubePlayer.videoID,
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
+            'onPlaybackQualityChange': onPlayerPlaybackQualityChange
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    setInterval(onPlayerProgressChange, 500); // Check video status every 500ms
+    progress25 = progress50 = progress75 = false;
+    url = player.getVideoUrl();
+    videoPlayed = false;
+    videoCompleted = false;
+}
+
+function onPlayerProgressChange() {
+    trackProgress = configYouTubePlayer.trackProgress;
+    duration = player.getDuration(); // Returns the duration in seconds of the currently playing video.
+    currentTime = player.getCurrentTime(); // Returns the elapsed time in seconds since the video started playing.
+    timePercentComplete = currentTime / duration * 100; // Calculate percent complete
+    timePercentComplete = Math.round(timePercentComplete); // Round to a whole number
+
+    if (trackProgress) {
+        var progressTracked;
+
+        if (timePercentComplete > 24 && !progress25) {
+            progress = 'Played video: 25%';
+            progress25 = true;
+            progressTracked = true;
+        }
+
+        if (timePercentComplete > 49 && !progress50) {
+            progress = 'Played video: 50%';
+            progress50 = true;
+            progressTracked = true;
+        }
+
+        if (timePercentComplete > 74 && !progress75) {
+            progress = 'Played video: 75%';
+            progress75 = true;
+            progressTracked = true;
+        }
+
+        if (progressTracked) {
+//            _gaq.push(['_trackEvent', 'YouTube', progress, url, undefined, true]);
+            _gaq.push(['_trackEvent', 'YouTube', progress, url]);
+        }
+    }
+}
+
+function onPlayerPlaybackQualityChange(event) {
+    trackPlaybackQuality = configYouTubePlayer.trackPlaybackQuality;
+
+    if (trackPlaybackQuality) {
+        var qualityTracked;
+
+        switch (event.data) {
+        case 'hd1080':
+            quality = 'Video quality: 1080p HD';
+            qualityTracked = true;
+            break;
+        case 'hd720':
+            quality = 'Video quality: 720p HD';
+            qualityTracked = true;
+            break;
+        case 'large':
+            quality = 'Video quality: 480p';
+            qualityTracked = true;
+            break;
+        case 'medium':
+            quality = 'Video quality: 360p';
+            qualityTracked = true;
+            break;
+        case 'small':
+            quality = 'Video quality: 240p';
+            qualityTracked = true;
+            break;
+        }
+
+        if (qualityTracked) {
+            _gaq.push(['_trackEvent', 'YouTube', quality, url]);
+        }
+    }
+}
+
+function onPlayerStateChange(event) {
+    switch (event.data) {
+    case YT.PlayerState.PLAYING:
+        if (!videoPlayed) {
+            _gaq.push(['_trackEvent', 'YouTube', 'Started video', url]);
+            videoPaused = false;
+            videoPlayed = true; // Avoid subsequent play trackings
+        }
+        break;
+
+    case YT.PlayerState.PAUSED:
+        if (timePercentComplete < 92 && !videoPaused) {
+            _gaq.push(['_trackEvent', 'YouTube', 'Paused video', url]);
+            videoPaused = true; // Avoid subsequent pause trackings
+        }
+        break;
+
+    case YT.PlayerState.ENDED:
+        if (!videoCompleted) {
+            _gaq.push(['_trackEvent', 'YouTube', 'Completed video', url]);
+            videoCompleted = true; // Avoid subsequent finish trackings
+        }
+        break;
+    }
+}
