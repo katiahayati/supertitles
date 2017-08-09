@@ -30,21 +30,24 @@ while (<>) {
     my $chunk = $_;
     $chunk =~ s/^\s*//gm;
     $chunk =~ s/\s*$//gm;
-    my @characters = split /^[A-Z]+$/m, $chunk;
+    my @characters = split /^[A-Z ]+$/m, $chunk;
     print <<EOH;
 <div class="slide">
 EOH
+    @characters = map { s/^\s+//gm; $_ } @characters;
+    @characters = grep { /\S/ } @characters;
+    my $prefix = (@characters > 1) ? "-" : "";
     foreach my $char (@characters) {
-	$char =~ s/^\s+//gm;
-	next unless $char =~ /\S/;
+#	$char =~ s/^\s+//gm;
+	#	next unless $char =~ /\S/;
+	
 	print <<EOH
-<h1>- $char</h1>
+<h1>$prefix $char</h1>
 EOH
     }
     print <<EOH;
 </div>
 EOH
-    if ($. == 4) { exit }
 	    
 }
 print <<EOH;
