@@ -30,7 +30,7 @@ while (<>) {
     my $chunk = $_;
     $chunk =~ s/^\s*//gm;
     $chunk =~ s/\s*$//gm;
-    my @characters = split /^[A-Z ]+$/m, $chunk;
+    my @characters = split /^[A-Z ,]+$/m, $chunk;
     print <<EOH;
 <div class="slide">
 EOH
